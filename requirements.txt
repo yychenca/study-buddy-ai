@@ -1,0 +1,28 @@
+# Web Framework
+streamlit>=1.28.0
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+
+# AI and ML
+google-generativeai>=0.3.0
+pinecone>=3.0.0
+langchain>=0.0.350
+langchain-community>=0.0.38
+
+# Document Processing
+PyPDF2>=3.0.1
+python-docx>=0.8.11
+python-multipart>=0.0.6
+
+# Database
+aiosqlite>=0.19.0
+
+# Utilities
+python-dotenv>=1.0.0
+requests>=2.31.0
+pydantic>=2.5.0
+typing-extensions>=4.8.0
+
+# Development
+pytest>=7.4.3
+pytest-asyncio>=0.21.1
