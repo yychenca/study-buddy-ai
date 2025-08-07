@@ -26,10 +26,20 @@ You will implement the 5 core steps of a RAG system:
 ### ✅ Task 1: Document Loading & Text Extraction (30-45 minutes)
 **File:** `backend/services/processor.py`
 
+**Specific functions to implement:**
+- [ ] **`_extract_text()` method** - Add file type dispatch logic (lines 104-106)
+- [ ] **Text chunking in `process_document()`** - Uncomment chunking line (line 67)
+
 **What you'll implement:**
-- [ ] Text extraction from PDF, DOCX, and TXT files
-- [ ] Intelligent text chunking with overlap
+- [ ] Text extraction dispatch for PDF, DOCX, and TXT files in `_extract_text()`
+- [ ] Intelligent text chunking by uncommenting `self.text_splitter.split_text(text)`
 - [ ] Error handling for different file formats
+
+**Implementation details:**
+- **Function:** `_extract_text(file_content, filename)` 
+- **Location:** Around line 76 in processor.py
+- **Task:** Replace `return "TODO: Implement text extraction logic"` with proper file type handling
+- **Also:** In `process_document()`, replace `chunks = ["TODO: Implement chunking logic"]` with actual chunking
 
 **Key learning:** How to prepare documents for AI processing
 
@@ -40,10 +50,21 @@ You will implement the 5 core steps of a RAG system:
 ### ✅ Task 2: Embedding Generation (20-30 minutes)  
 **File:** `backend/services/gemini_service.py`
 
+**Specific functions to implement:**
+- [ ] **`generate_embedding()` method** - Replace placeholder return (line 60)
+- [ ] **`generate_query_embedding()` method** - Replace placeholder return (line 98)
+
 **What you'll implement:**
-- [ ] Document embedding generation using Gemini API
-- [ ] Query embedding generation for search
+- [ ] Document embedding generation using `genai.embed_content()` API
+- [ ] Query embedding generation with different task_type
 - [ ] API error handling and validation
+
+**Implementation details:**
+- **Function:** `generate_embedding(text)` 
+- **Location:** Around line 26 in gemini_service.py
+- **Task:** Replace `return [0.0] * 768` with real `genai.embed_content()` call
+- **Also:** `generate_query_embedding(query)` around line 74
+- **Key difference:** Use `task_type="retrieval_document"` vs `task_type="retrieval_query"`
 
 **Key learning:** How text becomes numerical vectors for AI
 
@@ -54,10 +75,20 @@ You will implement the 5 core steps of a RAG system:
 ### ✅ Task 3: Vector Storage (30-45 minutes)
 **File:** `backend/services/pinecone_service.py`
 
+**Specific functions to implement:**
+- [ ] **`upsert_document_chunks()` method** - Replace `return False` (line 80)
+
 **What you'll implement:**
-- [ ] Store embeddings in Pinecone vector database
-- [ ] Project-based organization using namespaces
+- [ ] Vector preparation with unique IDs and metadata
+- [ ] Pinecone upsert operation with project namespaces
 - [ ] Metadata storage for document information
+
+**Implementation details:**
+- **Function:** `upsert_document_chunks(project_id, document_id, filename, chunks, embeddings)` 
+- **Location:** Around line 32 in pinecone_service.py
+- **Task:** Replace `return False` placeholder with actual vector storage logic
+- **Key steps:** Create vector tuples → Set namespace → Call `self.index.upsert()`
+- **Vector format:** `(vector_id, embedding, metadata)` tuples
 
 **Key learning:** How vector databases enable fast semantic search
 
@@ -68,10 +99,20 @@ You will implement the 5 core steps of a RAG system:
 ### ✅ Task 4: Similarity Retrieval (20-30 minutes)
 **File:** `backend/services/pinecone_service.py`
 
+**Specific functions to implement:**
+- [ ] **`search_similar_chunks()` method** - Replace `return []` (line 146)
+
 **What you'll implement:**
-- [ ] Semantic similarity search using cosine similarity
-- [ ] Project-specific and global search capabilities
-- [ ] Result ranking and formatting
+- [ ] Pinecone similarity search using `index.query()`
+- [ ] Project-specific and global search with namespaces
+- [ ] Result formatting with metadata extraction
+
+**Implementation details:**
+- **Function:** `search_similar_chunks(query_embedding, project_id, top_k)` 
+- **Location:** Around line 105 in pinecone_service.py
+- **Task:** Replace `return []` placeholder with actual similarity search
+- **Key steps:** Set namespace → Call `self.index.query()` → Format results
+- **Query parameters:** `vector`, `top_k`, `include_metadata=True`, `namespace`
 
 **Key learning:** How AI finds relevant context for questions
 
@@ -82,10 +123,23 @@ You will implement the 5 core steps of a RAG system:
 ### ✅ Task 5: Context-Aware Generation (30-45 minutes)
 **File:** `backend/routers/chat.py`
 
+**Specific functions to implement:**
+- [ ] **`chat_with_project()` function** - Replace RAG pipeline section (lines 45-47)
+
 **What you'll implement:**
-- [ ] Complete RAG pipeline integration
-- [ ] Context injection into LLM prompts
-- [ ] Response generation with document grounding
+- [ ] Query embedding generation for user questions
+- [ ] Vector search to find relevant document chunks
+- [ ] Context extraction and response generation with retrieved information
+
+**Implementation details:**
+- **Function:** `chat_with_project(project_id, message)` 
+- **Location:** Around line 11 in chat.py
+- **Task:** Replace placeholder variables with complete RAG pipeline
+- **Key steps:** Generate query embedding → Search vectors → Extract context → Generate response
+- **Replace these lines:**
+  - `query_embedding = None` → Real embedding generation
+  - `relevant_chunks = []` → Real context retrieval  
+  - `response = "TODO: ..."` → Real LLM generation with context
 
 **Key learning:** How retrieval improves AI accuracy and reduces hallucination
 
@@ -140,34 +194,44 @@ python tests/run_all_tests.py
 ## 📝 Implementation Tips
 
 ### Task 1: Document Processing
+**Look for:** `return "TODO: Implement text extraction logic"` in `_extract_text()` method
 - The helper methods (`_extract_pdf_text`, etc.) are already implemented
 - You just need to call them correctly in `_extract_text`
-- For chunking, uncomment the line using `self.text_splitter.split_text(text)`
+- **Replace the TODO return** with if/elif/else logic for file extensions
+- **For chunking:** Replace `chunks = ["TODO: Implement chunking logic"]` with `chunks = self.text_splitter.split_text(text)`
 - Pay attention to error handling for different file types
 
 ### Task 2: Embedding Generation
-- Use `genai.embed_content()` for both document and query embeddings
-- Different `task_type` parameters optimize for different use cases
+**Look for:** `return [0.0] * 768` placeholders in both embedding methods
+- **Replace placeholder returns** with actual `genai.embed_content()` calls
+- Use `task_type="retrieval_document"` for document embedding
+- Use `task_type="retrieval_query"` for query embedding  
 - Handle API errors gracefully (network issues, rate limits)
 - Validate input text is not empty
 
 ### Task 3: Vector Storage
+**Look for:** `return False` placeholder in `upsert_document_chunks()` method
+- **Replace `return False`** with complete vector storage implementation
 - Create unique IDs for each chunk: `f"{document_id}_{chunk_index}"`
 - Store both preview text and full text in metadata
 - Use project namespaces: `f"project_{project_id}"`
 - The Pinecone `upsert` method takes a list of tuples: `(id, vector, metadata)`
 
 ### Task 4: Similarity Retrieval
+**Look for:** `return []` placeholder in `search_similar_chunks()` method
+- **Replace `return []`** with actual similarity search implementation
 - Use `self.index.query()` for similarity search
 - Set `include_metadata=True` to get document information
-- Handle both project-specific and global search
+- Handle both project-specific and global search with namespaces
 - Format results consistently with id, score, metadata, and text
 
 ### Task 5: RAG Generation
+**Look for:** Three placeholder variables in `chat_with_project()` function
+- **Replace `query_embedding = None`** with real embedding generation
+- **Replace `relevant_chunks = []`** with actual search and context extraction  
+- **Replace `response = "TODO: ..."`** with real LLM generation using context
 - Follow the 5-step pipeline: embed query → search → extract text → generate response
-- Use `gemini_service.generate_query_embedding()` for queries
 - Extract text from search results: `[result["text"] for result in search_results]`
-- Pass context to `generate_response()` method
 
 ## 🐛 Common Issues & Solutions
 

@@ -19,8 +19,15 @@ Students should understand:
 **File:** `backend/services/processor.py`
 
 **What students implement:**
-- Text extraction dispatch logic in `_extract_text()`
-- Text chunking by uncommenting `self.text_splitter.split_text(text)`
+- **`_extract_text()` method** (around line 76) - Replace `return "TODO: Implement text extraction logic"`
+- **Text chunking in `process_document()`** (around line 64) - Replace `chunks = ["TODO: Implement chunking logic"]`
+
+**Specific implementation locations:**
+- **Function:** `_extract_text(file_content, filename)` 
+- **Replace:** `return "TODO: Implement text extraction logic"` 
+- **With:** File type dispatch logic (if/elif/else for .pdf/.docx/.txt)
+- **Also replace:** `chunks = ["TODO: Implement chunking logic"]`
+- **With:** `chunks = self.text_splitter.split_text(text)`
 
 **Common student mistakes:**
 1. **Not uncommenting template code** - Most common issue!
@@ -71,8 +78,16 @@ chunks = self.text_splitter.split_text(text)
 **File:** `backend/services/gemini_service.py`
 
 **What students implement:**
-- `genai.embed_content()` calls for documents and queries
-- Different `task_type` parameters for optimization
+- **`generate_embedding()` method** (around line 26) - Replace `return [0.0] * 768`
+- **`generate_query_embedding()` method** (around line 74) - Replace `return [0.0] * 768`
+
+**Specific implementation locations:**
+- **Function:** `generate_embedding(text)` 
+- **Replace:** `return [0.0] * 768  # Placeholder - replace with real embeddings`
+- **With:** `genai.embed_content()` call using `task_type="retrieval_document"`
+- **Function:** `generate_query_embedding(query)`
+- **Replace:** `return [0.0] * 768  # Placeholder - replace with real embeddings`  
+- **With:** `genai.embed_content()` call using `task_type="retrieval_query"`
 
 **Common student mistakes:**
 1. **API key issues** - Most common blocker
@@ -137,8 +152,16 @@ result = genai.embed_content(model="models/text-embedding-004", content="test")
 **File:** `backend/services/pinecone_service.py`
 
 **What students implement:**
-- Vector preparation with metadata
-- Pinecone `upsert()` calls with namespaces
+- **`upsert_document_chunks()` method** (around line 32) - Replace `return False`
+
+**Specific implementation locations:**
+- **Function:** `upsert_document_chunks(project_id, document_id, filename, chunks, embeddings)` 
+- **Replace:** `return False  # Change to True after implementing`
+- **With:** Complete vector storage logic including:
+  - Vector preparation: `vectors.append((vector_id, embedding, metadata))`
+  - Namespace setting: `namespace = f"project_{project_id}"`
+  - Pinecone upsert: `self.index.upsert(vectors=vectors, namespace=namespace)`
+  - Return `True` on success
 
 **Common student mistakes:**
 1. **Pinecone API key issues** - Second most common blocker
@@ -208,8 +231,16 @@ print(pc.list_indexes())  # Should show studybuddy-documents index
 **File:** `backend/services/pinecone_service.py`
 
 **What students implement:**
-- `index.query()` calls for similarity search
-- Result formatting and metadata extraction
+- **`search_similar_chunks()` method** (around line 105) - Replace `return []`
+
+**Specific implementation locations:**
+- **Function:** `search_similar_chunks(query_embedding, project_id, top_k)` 
+- **Replace:** `return []  # Replace with actual search results`
+- **With:** Complete similarity search including:
+  - Namespace handling: `namespace = f"project_{project_id}" if project_id else None`
+  - Pinecone query: `results = self.index.query(vector=query_embedding, top_k=top_k, ...)`
+  - Result formatting: Extract `id`, `score`, `metadata`, `text` from matches
+  - Return formatted results list
 
 **Common student mistakes:**
 1. **No data to search** - Task 3 not working first
@@ -271,8 +302,15 @@ def search_similar_chunks(
 **File:** `backend/routers/chat.py`
 
 **What students implement:**
-- Complete RAG pipeline integration
-- Query embedding → search → context extraction → generation
+- **`chat_with_project()` function** (around line 11) - Replace RAG pipeline placeholders
+
+**Specific implementation locations:**
+- **Function:** `chat_with_project(project_id, message)` 
+- **Replace these placeholder lines:**
+  - `query_embedding = None` → `gemini_service.generate_query_embedding(message.message)`
+  - `relevant_chunks = []` → Real search and context extraction  
+  - `response = "TODO: Implement RAG-powered chat response"` → Real LLM generation
+- **Complete 5-step pipeline:** Embed query → Search vectors → Extract context → Generate response
 
 **Common student mistakes:**
 1. **Pipeline sequence errors** - Wrong order of operations
