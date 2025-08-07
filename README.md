@@ -117,34 +117,116 @@ StudyBuddy AI helps you organize documents, extract insights, and have intellige
 
 ### Running the Application
 
+StudyBuddy AI consists of two components that need to run simultaneously:
+- **Backend**: FastAPI server that handles API requests and AI processing
+- **Frontend**: Streamlit web interface that users interact with
+
 #### Option 1: Using Startup Scripts (Recommended)
 
-1. **Start the backend:**
-   ```bash
-   python start_backend.py
-   ```
+**Step 1: Activate your environment**
+```bash
+# If using conda:
+conda activate studybuddy
 
-2. **In a new terminal, start the frontend:**
-   ```bash
-   python start_frontend.py
-   ```
+# If using venv:
+# Windows:
+venv\Scripts\activate
+# macOS/Linux:
+source venv/bin/activate
+```
 
-#### Option 2: Manual Start
+**Step 2: Start the backend server**
 
-1. **Initialize database:**
-   ```bash
-   python scripts/init_db.py
-   ```
+Open your first terminal/command prompt and run:
+```bash
+python start_backend.py
+```
 
-2. **Start FastAPI backend:**
-   ```bash
-   uvicorn backend.main:app --reload --port 8000
-   ```
+You should see output like:
+```
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [12345]
+INFO:     Started server process [12346]
+```
 
-3. **Start Streamlit frontend:**
-   ```bash
-   streamlit run frontend/app.py
-   ```
+**Step 3: Start the frontend (in a NEW terminal)**
+
+Open a **second** terminal/command prompt, activate your environment again, and run:
+```bash
+# Activate environment first
+conda activate studybuddy  # or source venv/bin/activate
+
+# Start frontend
+python start_frontend.py
+```
+
+You should see output like:
+```
+You can now view your Streamlit app in your browser.
+
+Local URL: http://localhost:8501
+Network URL: http://192.168.1.xxx:8501
+```
+
+**Step 4: Access the application**
+- The frontend will automatically open in your browser at `http://localhost:8501`
+- If it doesn't open automatically, manually navigate to `http://localhost:8501`
+- Keep both terminals running while using the application
+
+#### Option 2: Manual Start (Advanced)
+
+If the startup scripts don't work, you can start each component manually:
+
+**Step 1: Initialize database (first time only)**
+```bash
+conda activate studybuddy  # Activate your environment
+python scripts/init_db.py
+```
+
+**Step 2: Start FastAPI backend**
+```bash
+# In terminal 1:
+conda activate studybuddy
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Step 3: Start Streamlit frontend**
+```bash
+# In terminal 2:
+conda activate studybuddy
+streamlit run frontend/app.py --server.port 8501
+```
+
+#### Troubleshooting Startup Issues
+
+**"Port already in use" error:**
+```bash
+# Check what's using the ports:
+# Windows:
+netstat -ano | findstr :8000
+netstat -ano | findstr :8501
+
+# macOS/Linux:
+lsof -i :8000
+lsof -i :8501
+
+# Kill processes if needed (use PID from above commands):
+# Windows:
+taskkill /PID <process_id> /F
+
+# macOS/Linux:
+kill -9 <process_id>
+```
+
+**Backend won't start:**
+- Verify your `.env` file has valid API keys
+- Check that all dependencies are installed: `pip install -r requirements.txt`
+- Ensure you're in the project root directory
+
+**Frontend can't connect to backend:**
+- Verify backend is running on `http://localhost:8000`
+- Check `http://localhost:8000/docs` to confirm API is accessible
+- Ensure no firewall is blocking the connection
 
 ### Access the Application
 
@@ -357,6 +439,188 @@ studybuddy-ai/
 - **Max files per project**: 20
 - **Max file size**: 50MB
 - **Supported formats**: PDF, DOCX, TXT
+
+## 🚀 Deployment
+
+### Free Hosting Options
+
+You can deploy StudyBuddy AI to various free hosting platforms. Here are the most popular options:
+
+#### Option 1: Streamlit Community Cloud (Recommended for Frontend)
+
+**Best for**: Quick deployment of Streamlit apps
+**Limitations**: Backend needs separate hosting
+
+1. **Prepare your repository:**
+   ```bash
+   # Add streamlit-specific requirements
+   echo "streamlit" >> requirements.txt
+   
+   # Create streamlit config (optional)
+   mkdir -p .streamlit
+   cat > .streamlit/config.toml << EOF
+   [server]
+   headless = true
+   port = 8501
+   
+   [theme]
+   base = "light"
+   EOF
+   ```
+
+2. **Deploy to Streamlit Cloud:**
+   - Go to [share.streamlit.io](https://share.streamlit.io)
+   - Connect your GitHub account
+   - Select your repository
+   - Set main file path: `frontend/app.py`
+   - Add your environment variables (API keys) in the secrets section
+
+**Note**: You'll need to modify the app to work without a separate backend or use a hosted backend service.
+
+#### Option 2: Railway (Full-Stack Deployment)
+
+**Best for**: Complete full-stack deployment
+**Free tier**: 500 hours/month, $5 credit
+
+1. **Prepare for Railway:**
+   ```bash
+   # Create railway.json
+   cat > railway.json << EOF
+   {
+     "\$schema": "https://railway.app/railway.schema.json",
+     "build": {
+       "builder": "NIXPACKS"
+     },
+     "deploy": {
+       "startCommand": "python start_backend.py & python start_frontend.py",
+       "restartPolicyType": "ON_FAILURE",
+       "restartPolicyMaxRetries": 10
+     }
+   }
+   EOF
+   
+   # Create Procfile for process management
+   cat > Procfile << EOF
+   web: python start_backend.py & streamlit run frontend/app.py --server.port \$PORT --server.address 0.0.0.0
+   EOF
+   ```
+
+2. **Deploy to Railway:**
+   - Go to [railway.app](https://railway.app)
+   - Connect GitHub account
+   - Deploy your repository
+   - Add environment variables in Railway dashboard
+   - Railway will automatically detect Python and install dependencies
+
+#### Option 3: Render (Separate Services)
+
+**Best for**: Professional deployment with separate backend/frontend
+**Free tier**: 750 hours/month per service
+
+1. **Backend deployment on Render:**
+   - Create `render.yaml`:
+   ```yaml
+   services:
+     - type: web
+       name: studybuddy-backend
+       env: python
+       buildCommand: "pip install -r requirements.txt"
+       startCommand: "uvicorn backend.main:app --host 0.0.0.0 --port $PORT"
+       envVars:
+         - key: GEMINI_API_KEY
+           sync: false
+         - key: PINECONE_API_KEY
+           sync: false
+   ```
+
+2. **Frontend deployment on Render:**
+   - Create separate service for Streamlit
+   - Set build command: `pip install -r requirements.txt`
+   - Set start command: `streamlit run frontend/app.py --server.port $PORT --server.address 0.0.0.0`
+
+#### Option 4: Heroku (Legacy Free Tier Alternative)
+
+**Note**: Heroku discontinued free tier, but still popular for paid hosting
+
+1. **Create Heroku configuration:**
+   ```bash
+   # Create Procfile
+   echo "web: python start_backend.py & streamlit run frontend/app.py --server.port \$PORT --server.address 0.0.0.0" > Procfile
+   
+   # Create runtime.txt
+   echo "python-3.9.18" > runtime.txt
+   ```
+
+#### Option 5: Fly.io (Recommended Alternative)
+
+**Best for**: Docker-based deployment
+**Free tier**: Generous allowances for small apps
+
+1. **Install Fly CLI and setup:**
+   ```bash
+   # Install Fly CLI (visit fly.io for instructions)
+   
+   # Create Dockerfile
+   cat > Dockerfile << EOF
+   FROM python:3.9-slim
+   
+   WORKDIR /app
+   COPY requirements.txt .
+   RUN pip install -r requirements.txt
+   
+   COPY . .
+   
+   EXPOSE 8000 8501
+   
+   CMD ["sh", "-c", "python start_backend.py & streamlit run frontend/app.py --server.port 8501 --server.address 0.0.0.0"]
+   EOF
+   
+   # Initialize fly app
+   fly launch
+   ```
+
+### Deployment Preparation Checklist
+
+Before deploying to any platform:
+
+1. **Environment Variables:**
+   - Set `GEMINI_API_KEY` in hosting platform's environment settings
+   - Set `PINECONE_API_KEY` in hosting platform's environment settings
+   - Never commit API keys to your repository
+
+2. **Database Setup:**
+   - For production, consider using hosted SQLite or PostgreSQL
+   - Update `DATABASE_PATH` environment variable if needed
+
+3. **CORS Configuration:**
+   - Update FastAPI CORS settings for your domain
+   - Modify `backend/main.py` if needed
+
+4. **Port Configuration:**
+   - Ensure your app can use dynamic ports (`$PORT` environment variable)
+   - Most platforms assign ports dynamically
+
+5. **Dependencies:**
+   - Ensure `requirements.txt` is up to date
+   - Test installation locally: `pip install -r requirements.txt`
+
+### Production Considerations
+
+**Security:**
+- Use HTTPS in production
+- Set up proper environment variable management
+- Consider using secrets management services
+
+**Performance:**
+- Use gunicorn for FastAPI in production
+- Set up proper logging
+- Consider using Redis for caching
+- Monitor API rate limits (Gemini/Pinecone)
+
+**Scaling:**
+- Most free tiers have limitations
+- Plan for paid tiers if you expect high usage
+- Consider database scaling needs
 
 ## 🐛 Troubleshooting
 
