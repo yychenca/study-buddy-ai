@@ -89,7 +89,6 @@ def print_next_steps():
     print("1. Edit the .env file and add your API keys:")
     print("   - GEMINI_API_KEY=your_gemini_key_here")
     print("   - PINECONE_API_KEY=your_pinecone_key_here")
-    print("   - PINECONE_ENV=your_pinecone_environment_here")
     print("\n2. Activate the virtual environment:")
     if os.name == 'nt':  # Windows
         print("   venv\\Scripts\\activate")

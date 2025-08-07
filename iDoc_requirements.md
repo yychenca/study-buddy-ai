@@ -282,7 +282,6 @@ Create `.env` file:
 ```
 GEMINI_API_KEY=your_gemini_key
 PINECONE_API_KEY=your_pinecone_key
-PINECONE_ENV=your_pinecone_environment
 SECRET_KEY=your_secret_key
 DATABASE_PATH=./studybuddy.db
 ```
