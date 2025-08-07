@@ -154,25 +154,159 @@ StudyBuddy AI helps you organize documents, extract insights, and have intellige
 
 ## 📖 Usage Guide
 
-### 1. Create a Project
-- Open the app in your browser
-- Click "➕ Create New Project" in the sidebar
-- Give your project a name and description
+StudyBuddy AI provides an intuitive interface for organizing documents and having intelligent conversations about your content. Here's a detailed walkthrough:
 
-### 2. Upload Documents
-- Go to the "📄 Documents" tab
-- Drag and drop or select files to upload
-- Supported formats: PDF, DOCX, TXT (max 50MB each)
+### Getting Started
 
-### 3. Chat with Your Documents
+1. **Launch the Application**
+   
+   After installation, start both the backend and frontend:
+   ```bash
+   # Terminal 1: Start backend
+   conda activate studybuddy  # or activate your environment
+   python start_backend.py
+   
+   # Terminal 2: Start frontend (in a new terminal)
+   conda activate studybuddy
+   python start_frontend.py
+   ```
+   
+   The application will open in your browser at `http://localhost:8501`
+
+### Step-by-Step Usage
+
+#### 1. Create Your First Project
+
+When you first open StudyBuddy AI, you'll see the main interface with a sidebar on the left.
+
+![Main Interface](screenshots/main-interface.png)
+*The main StudyBuddy AI interface with project sidebar*
+
+**To create a new project:**
+- Click the "➕ Create New Project" button in the sidebar
+- Enter a **Project Name** (e.g., "Machine Learning Course")
+- Add a **Description** (e.g., "Notes and papers for CS229")
+- Click "Create Project"
+
+![Create Project](screenshots/create-project.png)
+*Project creation dialog*
+
+Your new project will appear in the sidebar and be automatically selected.
+
+#### 2. Upload Documents
+
+Once you have a project, you can start adding documents:
+
+**Navigate to Documents:**
+- Click on the "📄 Documents" tab in the main area
+- You'll see the document upload interface
+
+![Document Upload](screenshots/document-upload.png)
+*Document upload interface with drag-and-drop functionality*
+
+**Upload your files:**
+- **Drag and drop** files directly onto the upload area, OR
+- Click "Browse files" to select files from your computer
+- **Supported formats**: PDF, DOCX, TXT files
+- **File limits**: Up to 20 files per project, maximum 50MB per file
+
+**After upload:**
+- Files will be automatically processed and indexed
+- You'll see a list of all uploaded documents
+- Processing may take a few moments for large files
+
+#### 3. Chat with Your Documents
+
+This is where StudyBuddy AI shines - intelligent conversations about your content:
+
+**Start a conversation:**
 - Go to the "💬 Chat" tab
-- Ask questions about your documents
-- The AI will search through your content and provide relevant answers
+- You'll see a chat interface similar to ChatGPT
 
-### 4. Search Across Projects
-- Use the "🔍 Search" tab
-- Search within current project or across all projects
-- Find relevant content using semantic search
+![Chat Interface](screenshots/chat-interface.png)
+*Chat interface showing conversation with your documents*
+
+**Ask questions about your documents:**
+- Type questions in natural language
+- Examples:
+  - "What are the main concepts covered in these papers?"
+  - "Explain the difference between supervised and unsupervised learning"
+  - "Summarize the key findings from the research paper"
+  - "What examples are given for neural networks?"
+
+**How it works:**
+- StudyBuddy AI searches through your uploaded documents
+- It finds relevant sections and passages
+- Provides answers with context from your specific documents
+- You can have follow-up conversations to dive deeper
+
+#### 4. Smart Search Across Projects
+
+Use the semantic search feature to find specific information:
+
+**Access Search:**
+- Click on the "🔍 Search" tab
+- Enter your search query
+
+![Search Interface](screenshots/search-interface.png)
+*Search interface with semantic search results*
+
+**Search options:**
+- **Current Project**: Search only within the currently selected project
+- **All Projects**: Search across all your projects simultaneously
+
+**Search capabilities:**
+- **Semantic search**: Finds content by meaning, not just exact keywords
+- **Context-aware**: Understands the context of your query
+- **Ranked results**: Shows most relevant content first
+
+#### 5. Managing Projects
+
+**Switch between projects:**
+- Use the project selector in the sidebar
+- Each project maintains its own documents and chat history
+
+![Project Sidebar](screenshots/project-sidebar.png)
+*Project sidebar showing multiple organized projects*
+
+**Project organization tips:**
+- Create separate projects for different subjects or topics
+- Use descriptive names and descriptions
+- Keep related documents together in the same project
+
+### Best Practices
+
+1. **Document Organization**
+   - Group related documents in the same project
+   - Use clear, descriptive project names
+   - Keep file names meaningful
+
+2. **Effective Querying**
+   - Be specific in your questions
+   - Ask follow-up questions to get more detailed answers
+   - Use the chat history to build on previous conversations
+
+3. **File Management**
+   - Ensure documents are high-quality scans or text-based PDFs for best results
+   - Break up very large documents into smaller sections if needed
+   - Remove any documents you no longer need to keep projects organized
+
+### Troubleshooting Common Issues
+
+**Documents not processing:**
+- Check file format (PDF, DOCX, TXT only)
+- Ensure file size is under 50MB
+- Verify you haven't reached the 20-file limit per project
+
+**Chat responses seem inaccurate:**
+- Make sure your documents contain the information you're asking about
+- Try rephrasing your question
+- Check that the right project is selected
+
+**Application not loading:**
+- Ensure both backend and frontend are running
+- Check that no other applications are using ports 8000 or 8501
+- Verify your API keys are correctly set in the `.env` file
 
 ## 📁 Project Structure
 

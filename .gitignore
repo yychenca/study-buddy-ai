@@ -44,3 +44,5 @@ config.local.json
 
 # venv
 venv/
+
+screenshots/README.md 
