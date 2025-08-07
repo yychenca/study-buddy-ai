@@ -35,8 +35,40 @@ class DocumentProcessor:
                 print(f"No text extracted from {filename}")
                 return False
             
-            # Split text into chunks
-            chunks = self.text_splitter.split_text(text)
+            # TODO: TASK 1 - DOCUMENT SPLITTING/CHUNKING  
+            # Students need to implement intelligent text chunking
+            # This is the "Split" step in the RAG pipeline
+            
+            # TODO: Implement smart text chunking
+            # Instructions:
+            # 1. Split the extracted text into smaller, manageable chunks
+            # 2. Use sentence-aware chunking (don't break in middle of sentences)
+            # 3. Add overlap between chunks for context continuity
+            # 4. Optimize chunk size for embedding models (typically 500-1000 chars)
+            # 5. Handle edge cases like very short documents
+            #
+            # The RecursiveCharacterTextSplitter is already initialized with:
+            # - chunk_size: Maximum characters per chunk
+            # - chunk_overlap: Characters to overlap between chunks  
+            # - separators: Priority order for splitting ["\n\n", "\n", " ", ""]
+            #
+            # Expected behavior:
+            # - Input: Full document text as single string
+            # - Output: List of text chunks, each with reasonable size
+            # - Each chunk should be semantically meaningful
+            # - Chunks should have some overlap to maintain context
+            
+            assert text and text.strip(), "Text must not be empty for chunking"
+            
+            # TODO: Replace this placeholder with actual chunking logic
+            chunks = ["TODO: Implement chunking logic"]
+            
+            # Uncomment this line after implementing:
+            # chunks = self.text_splitter.split_text(text)
+            
+            # Validation check for students
+            assert chunks and len(chunks) > 0, "Chunking failed - no chunks were created"
+            assert chunks[0] != "TODO: Implement chunking logic", "Students must implement chunking logic"
             
             if not chunks:
                 print(f"No chunks created from {filename}")
@@ -75,17 +107,46 @@ class DocumentProcessor:
     
     def _extract_text(self, file_content: bytes, filename: str) -> str:
         """Extract text from different file types"""
+        # TODO: TASK 1 - DOCUMENT LOADING & TEXT EXTRACTION
+        # Students need to implement the text extraction logic for different file types
+        # This is the "Load" step in the RAG pipeline
+        
         file_extension = Path(filename).suffix.lower()
         
+        # TODO: Implement text extraction for PDF, DOCX, and TXT files
+        # Instructions:
+        # 1. For PDF files: Use PyPDF2 to extract text from all pages
+        # 2. For DOCX files: Use python-docx to extract text from all paragraphs  
+        # 3. For TXT files: Decode bytes to text with proper encoding handling
+        # 4. Handle errors gracefully and return empty string on failure
+        # 5. Each method should return a single string with all extracted text
+        #
+        # Hint: The helper methods _extract_pdf_text, _extract_docx_text, and 
+        # _extract_txt_text are already defined below. You need to call them here.
+        #
+        # Expected behavior:
+        # - PDF: Extract text from all pages, join with newlines
+        # - DOCX: Extract text from all paragraphs, join with newlines  
+        # - TXT: Handle different encodings (utf-8, utf-16, latin-1)
+        # - Return empty string if extraction fails
+        
+        assert file_extension in ['.pdf', '.docx', '.txt'], f"Unsupported file type: {file_extension}"
+        
         try:
-            if file_extension == '.pdf':
-                return self._extract_pdf_text(file_content)
-            elif file_extension == '.docx':
-                return self._extract_docx_text(file_content)
-            elif file_extension == '.txt':
-                return self._extract_txt_text(file_content)
-            else:
-                raise ValueError(f"Unsupported file type: {file_extension}")
+            # TODO: Add your implementation here
+            # Remove this placeholder return and implement the logic
+            return "TODO: Implement text extraction logic"
+            
+            # Uncomment and complete this template:
+            # if file_extension == '.pdf':
+            #     return self._extract_pdf_text(file_content)
+            # elif file_extension == '.docx':
+            #     return self._extract_docx_text(file_content)
+            # elif file_extension == '.txt':
+            #     return self._extract_txt_text(file_content)
+            # else:
+            #     raise ValueError(f"Unsupported file type: {file_extension}")
+            
         except Exception as e:
             print(f"Error extracting text from {filename}: {str(e)}")
             return ""

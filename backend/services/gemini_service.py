@@ -25,26 +25,86 @@ class GeminiService:
     
     def generate_embedding(self, text: str) -> List[float]:
         """Generate embeddings for the given text"""
+        # TODO: TASK 2 - EMBEDDING GENERATION
+        # Students need to implement text-to-vector conversion
+        # This is the "Embed" step in the RAG pipeline
+        
+        # TODO: Implement embedding generation using Google's Gemini embedding API
+        # Instructions:
+        # 1. Use genai.embed_content() to convert text to numerical vectors
+        # 2. Use model "models/text-embedding-004" for best performance
+        # 3. Set task_type="retrieval_document" for document chunks
+        # 4. Handle API errors gracefully (network issues, rate limits, etc.)
+        # 5. Return empty list [] on failure
+        # 6. Validate that the input text is not empty
+        #
+        # API Documentation:
+        # genai.embed_content(
+        #     model="models/text-embedding-004",
+        #     content=text,  # The text to embed
+        #     task_type="retrieval_document"  # Optimizes for document retrieval
+        # )
+        #
+        # Expected behavior:
+        # - Input: Text string (document chunk)
+        # - Output: List of floats (vector representation, typically 768 dimensions)
+        # - Handle empty/None text inputs
+        # - Log errors but don't crash the application
+        
+        assert text and isinstance(text, str), "Text input must be a non-empty string"
+        assert text.strip(), "Text input cannot be just whitespace"
+        
         try:
-            result = genai.embed_content(
-                model="models/text-embedding-004",
-                content=text,
-                task_type="retrieval_document"
-            )
-            return result['embedding']
+            # TODO: Replace this placeholder with actual embedding generation
+            # Remove this line and implement the real logic
+            return [0.0] * 768  # Placeholder - replace with real embeddings
+            
+            # Uncomment and use this template:
+            # result = genai.embed_content(
+            #     model="models/text-embedding-004",
+            #     content=text,
+            #     task_type="retrieval_document"
+            # )
+            # return result['embedding']
+            
         except Exception as e:
             print(f"Error generating embedding: {str(e)}")
             return []
     
     def generate_query_embedding(self, query: str) -> List[float]:
         """Generate embeddings for search queries"""
+        # TODO: TASK 2 - QUERY EMBEDDING GENERATION (Part of embedding task)
+        # Students need to implement query-to-vector conversion for search
+        # This is used in the "Retrieve" step of the RAG pipeline
+        
+        # TODO: Implement query embedding generation
+        # Instructions:
+        # 1. Similar to generate_embedding() but optimized for queries
+        # 2. Use same model "models/text-embedding-004"
+        # 3. Set task_type="retrieval_query" to optimize for search queries
+        # 4. Handle errors gracefully and return empty list on failure
+        # 5. Query embeddings should be in same vector space as document embeddings
+        #
+        # The difference between query and document embeddings:
+        # - Document embeddings (task_type="retrieval_document"): For content to be searched
+        # - Query embeddings (task_type="retrieval_query"): For search queries
+        # - Both should be compatible for similarity search
+        
+        assert query and isinstance(query, str), "Query input must be a non-empty string"
+        assert query.strip(), "Query input cannot be just whitespace"
+        
         try:
-            result = genai.embed_content(
-                model="models/text-embedding-004",
-                content=query,
-                task_type="retrieval_query"
-            )
-            return result['embedding']
+            # TODO: Replace this placeholder with actual query embedding generation
+            return [0.0] * 768  # Placeholder - replace with real embeddings
+            
+            # Uncomment and use this template:
+            # result = genai.embed_content(
+            #     model="models/text-embedding-004", 
+            #     content=query,
+            #     task_type="retrieval_query"
+            # )
+            # return result['embedding']
+            
         except Exception as e:
             print(f"Error generating query embedding: {str(e)}")
             return []
