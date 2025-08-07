@@ -1,6 +1,6 @@
 # StudyBuddy AI 📚
 
-A local NotebookLM clone built with Python! StudyBuddy AI helps you organize documents, extract insights, and have intelligent conversations about your content using AI.
+StudyBuddy AI helps you organize documents, extract insights, and have intelligent conversations about your content using AI.
 
 ## ✨ Features
 
@@ -30,19 +30,29 @@ A local NotebookLM clone built with Python! StudyBuddy AI helps you organize doc
 
 ### Installation
 
-1. **Clone or download this project**
+1. **Clone the repository**
    ```bash
-   cd studybuddy-ai
+   git clone https://github.com/yychenca/study-buddy-ai.git
+   cd study-buddy-ai
    ```
 
-2. **Create virtual environment**
-   ```bash
-   python -m venv venv
+2. **Create and activate conda environment**
    
+   Create a new conda environment with Python 3.9+:
+   ```bash
+   conda create -n studybuddy python=3.9
+   conda activate studybuddy
+   ```
+   
+   **Alternative: Using existing Python installation**
+   If you prefer to use pip and venv instead of conda:
+   ```bash
    # On Windows:
+   python -m venv venv
    venv\Scripts\activate
    
    # On macOS/Linux:
+   python -m venv venv
    source venv/bin/activate
    ```
 
@@ -52,21 +62,52 @@ A local NotebookLM clone built with Python! StudyBuddy AI helps you organize doc
    ```
 
 4. **Set up environment variables**
-   ```bash
-   # Copy the example file
-   cp .env.example .env
    
-   # Edit .env and add your API keys:
-   # GEMINI_API_KEY=your_gemini_key_here
-   # PINECONE_API_KEY=your_pinecone_key_here
+   Create a `.env` file in the project root:
+   ```bash
+   # On Windows:
+   copy NUL .env
+   
+   # On macOS/Linux:
+   touch .env
+   ```
+   
+   Add your API keys to the `.env` file:
+   ```
+   GEMINI_API_KEY=your_gemini_key_here
+   PINECONE_API_KEY=your_pinecone_key_here
+   PINECONE_ENV=your_pinecone_environment
    ```
 
 ### Getting API Keys
 
-#### Google Gemini API
-1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Create a new API key
-3. Copy the key to your `.env` file
+#### Google Gemini API (Detailed Setup)
+
+1. **Create a Google Account** (if you don't have one)
+   - Go to [accounts.google.com](https://accounts.google.com) and create an account
+
+2. **Access Google AI Studio**
+   - Visit [Google AI Studio](https://aistudio.google.com/)
+   - Sign in with your Google account
+
+3. **Create API Key**
+   - Click on "Get API key" in the left sidebar
+   - Click "Create API key in new project" (or select an existing project)
+   - Your API key will be generated automatically
+   
+4. **Copy the API Key**
+   - Click the copy button next to your API key
+   - **Important**: Store this key securely - you won't be able to see it again
+   
+5. **Add to Environment File**
+   - Open your `.env` file in the project directory
+   - Add your key: `GEMINI_API_KEY=your_actual_api_key_here`
+   - **Do not** include quotes around the key
+
+6. **Verify API Access**
+   - The Gemini API has a generous free tier
+   - Check your usage at [AI Studio](https://aistudio.google.com/)
+   - Rate limits: 15 requests per minute, 1 million tokens per minute (free tier)
 
 #### Pinecone
 1. Sign up at [Pinecone](https://www.pinecone.io/)

@@ -41,3 +41,6 @@ temp/
 # Personal notes or configs
 notes.txt
 config.local.json
+
+# venv
+venv/
