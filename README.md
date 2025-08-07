@@ -76,7 +76,6 @@ StudyBuddy AI helps you organize documents, extract insights, and have intellige
    ```
    GEMINI_API_KEY=your_gemini_key_here
    PINECONE_API_KEY=your_pinecone_key_here
-   PINECONE_ENV=your_pinecone_environment
    ```
 
 ### Getting API Keys
@@ -429,7 +428,6 @@ studybuddy-ai/
 |----------|-------------|----------|
 | `GEMINI_API_KEY` | Google Gemini API key | Yes |
 | `PINECONE_API_KEY` | Pinecone API key | Yes |
-| `PINECONE_ENV` | Pinecone environment | Yes |
 | `DATABASE_PATH` | SQLite database path | No (default: ./studybuddy.db) |
 | `API_HOST` | API host | No (default: localhost) |
 | `API_PORT` | API port | No (default: 8000) |
