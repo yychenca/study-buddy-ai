@@ -21,6 +21,31 @@ You will implement the 5 core steps of a RAG system:
 
 ## ⏰ Time Estimate: 2-4 hours
 
+## 🧪 Testing Your Solutions
+
+Before starting, verify your environment is set up correctly:
+
+```bash
+# Test that all imports work
+python tests/test_imports.py
+```
+
+For each task, you can test your implementation:
+
+```bash
+# Test individual tasks
+python tests/test_task1_document_processing.py
+python tests/test_task2_embeddings.py
+python tests/test_task3_vector_storage.py
+python tests/test_task4_retrieval.py
+python tests/test_task5_rag_generation.py
+
+# Test everything at once
+python tests/run_all_tests.py
+```
+
+**Important:** Run tests from the project root directory (where this README is located).
+
 ## 📋 Task Checklist
 
 ### ✅ Task 1: Document Loading & Text Extraction (30-45 minutes)
@@ -43,7 +68,14 @@ You will implement the 5 core steps of a RAG system:
 
 **Key learning:** How to prepare documents for AI processing
 
-**Test your work:** `python tests/test_task1_document_processing.py`
+**Test your work:** 
+```bash
+# First verify imports work
+python tests/test_imports.py
+
+# Then test Task 1
+python tests/test_task1_document_processing.py
+```
 
 ---
 

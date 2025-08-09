@@ -13,6 +13,36 @@ Students should understand:
 - **Context-Aware Generation**: How retrieved information improves LLM responses
 - **Production AI Systems**: Real-world implementation challenges and solutions
 
+## 🧪 Testing & Validation
+
+Students can test their implementations using:
+
+```bash
+# First, verify environment setup
+python tests/test_imports.py
+
+# Test individual tasks  
+python tests/test_task1_document_processing.py
+python tests/test_task2_embeddings.py
+python tests/test_task3_vector_storage.py
+python tests/test_task4_retrieval.py
+python tests/test_task5_rag_generation.py
+
+# Test everything at once
+python tests/run_all_tests.py
+```
+
+**Important:** All test commands should be run from the project root directory.
+
+### Common Import Issues
+
+If students encounter `ModuleNotFoundError: No module named 'backend'`, they should:
+1. Make sure they're running tests from the project root directory
+2. Use the exact test commands above
+3. Verify that all files exist in the correct backend/ structure
+
+The test files automatically handle Python path configuration, so no additional setup should be needed.
+
 ## 📚 Task Breakdown & Common Issues
 
 ### Task 1: Document Loading & Text Extraction (30-45 min)

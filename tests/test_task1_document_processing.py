@@ -7,7 +7,12 @@ Usage: python -m pytest tests/test_task1_document_processing.py -v
 
 import pytest
 import io
+import sys
 from pathlib import Path
+
+# Add parent directory to Python path for imports
+sys.path.append(str(Path(__file__).parent.parent))
+
 from backend.services.processor import document_processor
 
 class TestTask1DocumentProcessing:

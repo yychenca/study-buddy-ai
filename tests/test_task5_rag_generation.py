@@ -7,7 +7,13 @@ Usage: python -m pytest tests/test_task5_rag_generation.py -v
 
 import pytest
 import asyncio
+import sys
+from pathlib import Path
 from unittest.mock import Mock, patch
+
+# Add parent directory to Python path for imports
+sys.path.append(str(Path(__file__).parent.parent))
+
 from backend.routers.chat import chat_with_project
 from backend.models import ChatMessage
 

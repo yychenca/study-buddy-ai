@@ -6,6 +6,12 @@ Usage: python -m pytest tests/test_task2_embeddings.py -v
 """
 
 import pytest
+import sys
+from pathlib import Path
+
+# Add parent directory to Python path for imports
+sys.path.append(str(Path(__file__).parent.parent))
+
 from backend.services.gemini_service import gemini_service
 
 class TestTask2Embeddings:

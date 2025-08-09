@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(py tests/test_task1_document_processing.py)"
+    ],
+    "deny": []
+  }
+}
