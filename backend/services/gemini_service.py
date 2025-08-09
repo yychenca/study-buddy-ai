@@ -59,14 +59,6 @@ class GeminiService:
             # Remove this line and implement the real logic
             return [0.0] * 768  # Placeholder - replace with real embeddings
             
-            # Uncomment and use this template:
-            # result = genai.embed_content(
-            #     model="models/text-embedding-004",
-            #     content=text,
-            #     task_type="retrieval_document"
-            # )
-            # return result['embedding']
-            
         except Exception as e:
             print(f"Error generating embedding: {str(e)}")
             return []
@@ -96,14 +88,6 @@ class GeminiService:
         try:
             # TODO: Replace this placeholder with actual query embedding generation
             return [0.0] * 768  # Placeholder - replace with real embeddings
-            
-            # Uncomment and use this template:
-            # result = genai.embed_content(
-            #     model="models/text-embedding-004", 
-            #     content=query,
-            #     task_type="retrieval_query"
-            # )
-            # return result['embedding']
             
         except Exception as e:
             print(f"Error generating query embedding: {str(e)}")

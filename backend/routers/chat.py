@@ -46,33 +46,6 @@ async def chat_with_project(project_id: str, message: ChatMessage):
         relevant_chunks = []
         response = "TODO: Implement RAG-powered chat response"
         
-        # Uncomment and complete this template:
-        # # Step 1: Generate query embedding
-        # query_embedding = gemini_service.generate_query_embedding(message.message)
-        # if not query_embedding:
-        #     raise HTTPException(status_code=500, detail="Failed to generate query embedding")
-        # 
-        # # Step 2: Search for relevant document chunks
-        # relevant_chunks = []
-        # if pinecone_service:
-        #     search_results = pinecone_service.search_similar_chunks(
-        #         query_embedding=query_embedding,
-        #         project_id=project_id,
-        #         top_k=5  # Get top 5 most relevant chunks
-        #     )
-        #     
-        #     # Step 3: Extract text content from search results
-        #     relevant_chunks = [result["text"] for result in search_results if result.get("text")]
-        # 
-        # # Step 4 & 5: Generate response using LLM with retrieved context
-        # response = await gemini_service.generate_response(
-        #     prompt=message.message,
-        #     context=relevant_chunks if relevant_chunks else None
-        # )
-        
-        # Validation check for students
-        assert response != "TODO: Implement RAG-powered chat response", "Students must implement RAG chat pipeline"
-        
         # Save chat history
         chat_history = ChatHistory.create_new(
             project_id=project_id,

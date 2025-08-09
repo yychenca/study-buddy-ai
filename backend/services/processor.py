@@ -63,9 +63,6 @@ class DocumentProcessor:
             # TODO: Replace this placeholder with actual chunking logic
             chunks = ["TODO: Implement chunking logic"]
             
-            # Uncomment this line after implementing:
-            # chunks = self.text_splitter.split_text(text)
-            
             # Validation check for students
             assert chunks and len(chunks) > 0, "Chunking failed - no chunks were created"
             assert chunks[0] != "TODO: Implement chunking logic", "Students must implement chunking logic"
@@ -136,16 +133,6 @@ class DocumentProcessor:
             # TODO: Add your implementation here
             # Remove this placeholder return and implement the logic
             return "TODO: Implement text extraction logic"
-            
-            # Uncomment and complete this template:
-            # if file_extension == '.pdf':
-            #     return self._extract_pdf_text(file_content)
-            # elif file_extension == '.docx':
-            #     return self._extract_docx_text(file_content)
-            # elif file_extension == '.txt':
-            #     return self._extract_txt_text(file_content)
-            # else:
-            #     raise ValueError(f"Unsupported file type: {file_extension}")
             
         except Exception as e:
             print(f"Error extracting text from {filename}: {str(e)}")

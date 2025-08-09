@@ -9,7 +9,7 @@ import pytest
 import asyncio
 import sys
 from pathlib import Path
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, AsyncMock
 
 # Add parent directory to Python path for imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -28,8 +28,8 @@ class TestTask5RAGGeneration:
              patch('backend.routers.chat.pinecone_service') as mock_pinecone:
             
             # Setup mocks
-            mock_db.get_project.return_value = Mock(id="test_project", name="Test Project")
-            mock_db.create_chat_history.return_value = None
+            mock_db.get_project = AsyncMock(return_value=Mock(id="test_project", name="Test Project"))
+            mock_db.create_chat_history = AsyncMock()
             
             # Mock successful embedding generation
             mock_gemini.generate_query_embedding.return_value = [0.1] * 768
@@ -45,10 +45,10 @@ class TestTask5RAGGeneration:
             ]
             
             # Mock response generation
-            mock_gemini.generate_response.return_value = "Based on the documents, here is the answer."
+            mock_gemini.generate_response = AsyncMock(return_value="Based on the documents, here is the answer.")
             
             # Test message
-            message = ChatMessage(message="What is the main topic of the documents?")
+            message = ChatMessage(message="What is the main topic of the documents?", project_id="test_project")
             
             try:
                 result = await chat_with_project("test_project", message)
@@ -66,9 +66,9 @@ class TestTask5RAGGeneration:
                 print("✅ RAG pipeline implemented successfully")
                 
             except AssertionError as e:
-                pytest.fail(f"❌ TASK 5 FAILED: {str(e)}")
+                raise Exception(f"❌ TASK 5 FAILED: {str(e)}")
             except Exception as e:
-                pytest.fail(f"❌ TASK 5 FAILED: Error in RAG pipeline - {str(e)}")
+                raise Exception(f"❌ TASK 5 FAILED: Error in RAG pipeline - {str(e)}")
     
     @pytest.mark.asyncio
     async def test_query_embedding_step(self):
@@ -77,15 +77,15 @@ class TestTask5RAGGeneration:
              patch('backend.routers.chat.gemini_service') as mock_gemini, \
              patch('backend.routers.chat.pinecone_service') as mock_pinecone:
             
-            mock_db.get_project.return_value = Mock(id="test_project")
-            mock_db.create_chat_history.return_value = None
+            mock_db.get_project = AsyncMock(return_value=Mock(id="test_project"))
+            mock_db.create_chat_history = AsyncMock()
             
             # Test that query embedding is called
             mock_gemini.generate_query_embedding.return_value = [0.1] * 768
             mock_pinecone.search_similar_chunks.return_value = []
-            mock_gemini.generate_response.return_value = "Test response"
+            mock_gemini.generate_response = AsyncMock(return_value="Test response")
             
-            message = ChatMessage(message="Test question")
+            message = ChatMessage(message="Test question", project_id="test_project")
             
             try:
                 await chat_with_project("test_project", message)
@@ -97,7 +97,7 @@ class TestTask5RAGGeneration:
             except AssertionError:
                 # This means the implementation is not using the template
                 print("❌ Query embedding step not implemented correctly")
-                pytest.fail("❌ TASK 5 FAILED: Query embedding step missing")
+                raise Exception("❌ TASK 5 FAILED: Query embedding step missing")
     
     @pytest.mark.asyncio  
     async def test_context_retrieval_step(self):
@@ -106,17 +106,17 @@ class TestTask5RAGGeneration:
              patch('backend.routers.chat.gemini_service') as mock_gemini, \
              patch('backend.routers.chat.pinecone_service') as mock_pinecone:
             
-            mock_db.get_project.return_value = Mock(id="test_project")
-            mock_db.create_chat_history.return_value = None
+            mock_db.get_project = AsyncMock(return_value=Mock(id="test_project"))
+            mock_db.create_chat_history = AsyncMock()
             
             query_embedding = [0.1] * 768
             mock_gemini.generate_query_embedding.return_value = query_embedding
             mock_pinecone.search_similar_chunks.return_value = [
                 {"text": "Retrieved context"}
             ]
-            mock_gemini.generate_response.return_value = "Response with context"
+            mock_gemini.generate_response = AsyncMock(return_value="Response with context")
             
-            message = ChatMessage(message="Test question")
+            message = ChatMessage(message="Test question", project_id="test_project")
             
             try:
                 await chat_with_project("test_project", message)
@@ -131,7 +131,7 @@ class TestTask5RAGGeneration:
                 
             except AssertionError:
                 print("❌ Context retrieval step not implemented correctly")
-                pytest.fail("❌ TASK 5 FAILED: Context retrieval step missing")
+                raise Exception("❌ TASK 5 FAILED: Context retrieval step missing")
     
     @pytest.mark.asyncio
     async def test_context_aware_generation(self):
@@ -140,8 +140,8 @@ class TestTask5RAGGeneration:
              patch('backend.routers.chat.gemini_service') as mock_gemini, \
              patch('backend.routers.chat.pinecone_service') as mock_pinecone:
             
-            mock_db.get_project.return_value = Mock(id="test_project")
-            mock_db.create_chat_history.return_value = None
+            mock_db.get_project = AsyncMock(return_value=Mock(id="test_project"))
+            mock_db.create_chat_history = AsyncMock()
             
             mock_gemini.generate_query_embedding.return_value = [0.1] * 768
             
@@ -151,9 +151,9 @@ class TestTask5RAGGeneration:
                 {"text": chunk} for chunk in retrieved_chunks
             ]
             
-            mock_gemini.generate_response.return_value = "Context-aware response"
+            mock_gemini.generate_response = AsyncMock(return_value="Context-aware response")
             
-            message = ChatMessage(message="Test question")
+            message = ChatMessage(message="Test question", project_id="test_project")
             
             try:
                 await chat_with_project("test_project", message)
@@ -167,16 +167,16 @@ class TestTask5RAGGeneration:
                 
             except AssertionError:
                 print("❌ Context-aware generation not implemented correctly")
-                pytest.fail("❌ TASK 5 FAILED: Context not passed to generation")
+                raise Exception("❌ TASK 5 FAILED: Context not passed to generation")
     
     @pytest.mark.asyncio
     async def test_error_handling(self):
         """Test that errors are handled gracefully"""
         with patch('backend.routers.chat.db') as mock_db:
             # Test project not found
-            mock_db.get_project.return_value = None
+            mock_db.get_project = AsyncMock(return_value=None)
             
-            message = ChatMessage(message="Test question")
+            message = ChatMessage(message="Test question", project_id="test_project")
             
             try:
                 with pytest.raises(Exception):  # Should raise HTTPException
@@ -185,25 +185,27 @@ class TestTask5RAGGeneration:
                 print("✅ Error handling working correctly")
                 
             except Exception as e:
-                pytest.fail(f"❌ TASK 5 FAILED: Error handling test failed - {str(e)}")
+                raise Exception(f"❌ TASK 5 FAILED: Error handling test failed - {str(e)}")
     
     @pytest.mark.asyncio
     async def test_message_validation(self):
         """Test that empty messages are handled"""
         with patch('backend.routers.chat.db') as mock_db:
-            mock_db.get_project.return_value = Mock(id="test_project")
+            mock_db.get_project = AsyncMock(return_value=Mock(id="test_project"))
             
             # Test empty message
-            empty_message = ChatMessage(message="")
+            empty_message = ChatMessage(message="", project_id="test_project")
             
             try:
-                with pytest.raises(AssertionError):
+                with pytest.raises(Exception) as exc_info:
                     await chat_with_project("test_project", empty_message)
                 
+                # Check that it's an HTTPException with appropriate message
+                assert "Message cannot be empty" in str(exc_info.value)
                 print("✅ Message validation working correctly")
                 
             except Exception as e:
-                pytest.fail(f"❌ TASK 5 FAILED: Message validation failed - {str(e)}")
+                raise Exception(f"❌ TASK 5 FAILED: Message validation failed - {str(e)}")
 
 def run_task5_tests():
     """Helper function to run Task 5 tests with nice output"""

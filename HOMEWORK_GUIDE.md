@@ -52,17 +52,17 @@ python tests/run_all_tests.py
 **File:** `backend/services/processor.py`
 
 **Specific functions to implement:**
-- [ ] **`_extract_text()` method** - Add file type dispatch logic (lines 104-106)
-- [ ] **Text chunking in `process_document()`** - Uncomment chunking line (line 67)
+- [ ] **`_extract_text()` method** - Replace TODO placeholder (around line 135)
+- [ ] **Text chunking in `process_document()`** - Replace placeholder chunks (around line 64)
 
 **What you'll implement:**
 - [ ] Text extraction dispatch for PDF, DOCX, and TXT files in `_extract_text()`
-- [ ] Intelligent text chunking by uncommenting `self.text_splitter.split_text(text)`
+- [ ] Intelligent text chunking using `self.text_splitter.split_text(text)`
 - [ ] Error handling for different file formats
 
 **Implementation details:**
 - **Function:** `_extract_text(file_content, filename)` 
-- **Location:** Around line 76 in processor.py
+- **Location:** `_extract_text()` method in processor.py
 - **Task:** Replace `return "TODO: Implement text extraction logic"` with proper file type handling
 - **Also:** In `process_document()`, replace `chunks = ["TODO: Implement chunking logic"]` with actual chunking
 
@@ -83,8 +83,8 @@ python tests/test_task1_document_processing.py
 **File:** `backend/services/gemini_service.py`
 
 **Specific functions to implement:**
-- [ ] **`generate_embedding()` method** - Replace placeholder return (line 60)
-- [ ] **`generate_query_embedding()` method** - Replace placeholder return (line 98)
+- [ ] **`generate_embedding()` method** - Replace placeholder return (line 58-60)
+- [ ] **`generate_query_embedding()` method** - Replace placeholder return (line 89-90)
 
 **What you'll implement:**
 - [ ] Document embedding generation using `genai.embed_content()` API

@@ -79,25 +79,6 @@ class PineconeService:
             print(f"TODO: Store {len(chunks)} chunks for document {filename}")
             return False  # Change to True after implementing
             
-            # Uncomment and complete this template:
-            # vectors = []
-            # for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
-            #     vector_id = f"{document_id}_{i}"
-            #     metadata = {
-            #         "project_id": project_id,
-            #         "document_id": document_id, 
-            #         "filename": filename,
-            #         "chunk_index": i,
-            #         "text": chunk[:1000],  # Preview text (first 1000 chars)
-            #         "full_text": chunk     # Full text for retrieval
-            #     }
-            #     vectors.append((vector_id, embedding, metadata))
-            # 
-            # # Store vectors in project namespace
-            # namespace = f"project_{project_id}"
-            # self.index.upsert(vectors=vectors, namespace=namespace)
-            # return True
-            
         except Exception as e:
             print(f"Error upserting document chunks: {str(e)}")
             return False
@@ -144,30 +125,6 @@ class PineconeService:
             # Students need to implement the actual similarity search
             print(f"TODO: Search for similar chunks (top_k={top_k}, project={project_id})")
             return []  # Replace with actual search results
-            
-            # Uncomment and complete this template:
-            # # Determine search namespace (project-specific or global)
-            # namespace = f"project_{project_id}" if project_id else None
-            # 
-            # # Perform similarity search
-            # results = self.index.query(
-            #     vector=query_embedding,
-            #     top_k=top_k,
-            #     include_metadata=True,
-            #     namespace=namespace
-            # )
-            # 
-            # # Format results for downstream use
-            # formatted_results = []
-            # for match in results.matches:
-            #     formatted_results.append({
-            #         "id": match.id,
-            #         "score": match.score,           # Similarity score (0-1)
-            #         "metadata": match.metadata,     # Document info
-            #         "text": match.metadata.get("full_text", match.metadata.get("text", ""))
-            #     })
-            # 
-            # return formatted_results
             
         except Exception as e:
             print(f"Error searching similar chunks: {str(e)}")

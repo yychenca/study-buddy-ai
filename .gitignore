@@ -45,4 +45,7 @@ config.local.json
 # venv
 venv/
 
+# pyc
+*.pyc
+
 screenshots/README.md 

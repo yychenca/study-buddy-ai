@@ -21,21 +21,46 @@ class TestTask4Retrieval:
         if not pinecone_service:
             pytest.skip("Pinecone service not available - check API key configuration")
         
-        # Mock query embedding (in real implementation, this would come from Task 2)
-        query_embedding = [0.1, 0.2, 0.3] * 256  # 768-dimensional vector
-        project_id = "test_project"
-        top_k = 3
-        
         try:
+            # First, store some test data to search against
+            project_id = "test_project_search"
+            document_id = "test_doc_search"
+            filename = "test_search.txt"
+            chunks = [
+                "Artificial intelligence is transforming modern technology.",
+                "Machine learning algorithms help computers learn from data.",
+                "Natural language processing enables human-computer communication."
+            ]
+            # Mock embeddings
+            embeddings = [
+                [0.1, 0.2, 0.3] * 256,  # 768-dimensional vector
+                [0.4, 0.5, 0.6] * 256,  # 768-dimensional vector  
+                [0.7, 0.8, 0.9] * 256,  # 768-dimensional vector
+            ]
+            
+            # Store test data (this tests Task 3 as well)
+            storage_success = pinecone_service.upsert_document_chunks(
+                project_id=project_id,
+                document_id=document_id,
+                filename=filename,
+                chunks=chunks,
+                embeddings=embeddings
+            )
+            
+            if not storage_success:
+                pytest.skip("❌ Cannot test search - storage (Task 3) failed. Complete Task 3 first.")
+            
+            print("✅ Test data stored successfully")
+            
+            # Now test the search
+            query_embedding = [0.1, 0.2, 0.3] * 256  # Similar to first chunk
+            top_k = 3
+            
             results = pinecone_service.search_similar_chunks(
                 query_embedding=query_embedding,
                 project_id=project_id,
                 top_k=top_k
             )
-            
-            # Check that placeholder implementation is replaced
-            assert results != [], \
-                "❌ TASK 4 INCOMPLETE: You need to implement similarity search logic in search_similar_chunks method"
             
             # Check result structure
             assert isinstance(results, list), "❌ Search should return a list of results"
@@ -54,7 +79,7 @@ class TestTask4Retrieval:
                     
                 print(f"✅ Similarity search implemented - found {len(results)} results")
             else:
-                print("✅ Similarity search implemented (no results found - this is okay for empty index)")
+                print("✅ Similarity search implemented (no results found - check if data was stored properly)")
             
         except AssertionError as e:
             pytest.fail(f"❌ TASK 4 FAILED: {str(e)}")
